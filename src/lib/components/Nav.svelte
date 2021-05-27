@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 
-	export let routes = ['.','todos','blogs'];
+	export let routes = ['.','blogs'];
 	// your script goes here
 </script>
 

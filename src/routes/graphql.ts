@@ -1,24 +1,11 @@
 import type { EndpointOutput, RequestHandler } from "@sveltejs/kit";
 import { ApolloServer, gql } from "apollo-server-lambda";
+import { typeDefs } from "./graphql/typeDefs";
+import { resolvers } from "./graphql/resolvers";
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-  type Mutation {
-    double(x: Int!): Int!
-  }
-`;
+import mongoose from "mongoose";
+import connect from "$lib/db";
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => "Hello world!",
-  },
-  Mutation: {
-    double: (_, { x }) => x * 2,
-  },
-};
 
 const apolloServer = new ApolloServer({
   typeDefs,
@@ -28,7 +15,9 @@ const apolloServer = new ApolloServer({
   tracing: true,
 });
 
-const graphqlHandler = apolloServer.createHandler();
+connect()
+
+const graphqlHandler = apolloServer.createHandler()
 
 const handler: RequestHandler = async (args) => {
   return await new Promise<EndpointOutput>((resolve, reject) => {
